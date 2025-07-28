@@ -1,0 +1,24 @@
+name: Upload to App Center
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build APK
+        run: ./gradlew assembleDebug
+
+      - name: Upload to App Center
+        uses: wzieba/AppCenter-Github-Action@v1.3.4
+        with:
+          appName: 'Webhook'
+          token: ${{ secrets.APPCENTER_TOKEN }}
+          group: 'Testers'
+          file: app/build/outputs/apk/debug/app-debug.apk
+          releaseNotes: 'Nieuwe build via GitHub 🔥'
